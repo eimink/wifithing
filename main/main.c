@@ -1,11 +1,6 @@
-/*
- * SPDX-FileCopyrightText: 2023 Espressif Systems (Shanghai) CO LTD
- *
- * SPDX-License-Identifier: Unlicense OR CC0-1.0
- */
-/* WiFi Roaming App Example
+/* WiFiThing
 
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
+   Wifi roaming enabled, addressable LED and API thing
 
    Unless required by applicable law or agreed to in writing, this
    software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -25,6 +20,7 @@
 #include "sdkconfig.h"
 #include "lwip/err.h"
 #include "lwip/sys.h"
+#include "webserver.h"
 
 /* The examples use WiFi configuration that you can set via project configuration menu
 
@@ -43,7 +39,7 @@ static EventGroupHandle_t s_wifi_event_group;
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT      BIT1
 #define MAXIMUM_RETRY 5
-const char *TAG = "wifi roaming app";
+const char *TAG = "wifithing";
 
 static void event_handler(void* arg, esp_event_base_t event_base,
                           int32_t event_id, void* event_data)
@@ -228,6 +224,9 @@ void app_main(void)
 
     ESP_LOGI(TAG, "ESP_WIFI_MODE_STA");
     wifi_init_sta();
+
+    set_led_rgb(0, 0, 255);
+    start_server();
 
     while (1) {
         color_wheel(&hue);
